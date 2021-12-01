@@ -1,76 +1,57 @@
-class modelclass{
+class notmodel {
 
   late int _id;
   late String _title;
   late String _description;
   late String _date;
   late int _priority;
-  modelclass(this._title,this._date,this._priority,[this._description="your have no dec yet"]);
-//adding seter and getter fot database model class
-  //getter is used to get the value of the class fileld
+  notmodel(this._id, this._title,  this._date,this._priority, [this._description = "you haven't description yet"]);
 
-  int get id=>_id;
-  String get title=>_title;
-  String get description=>_description;
-  String get date=>_date;
-  int get priority=>_priority;
-  //setter is used to set the value of the class field
- set settitles(String newTitle){
-   if(newTitle.length<=255){
-     this._title= newTitle;
-   }
-
- }
-set description(String desc){
-   if(desc!.isEmpty){
-     this._description=desc;
-   }
- }
-
- set priority(int pri){
-    if(pri>=1&&pri<=2){
-      this._priority=pri;
+  //setter and getter
+//getter
+  int get id => _id;
+  String get title => _title;
+  String get description => _description;
+  String get date => _date;
+  int get priority => _priority;
+//setter
+  set title(String newTitle) {
+    if (newTitle.length <= 100) {
+      _title = newTitle;
     }
-
   }
 
-  set date(String newDate){
-   this._date=newDate;
- }
- //let us create a method to add data to data base as map object
-Map<String,dynamic>tomap(){
-   var map= Map<String,dynamic>();
-   if(id!=null){
-     map['id']=this.id;
-   }
-   map['title']=this._title;
-   map['desc']=this._description;
-   map['date']=this._date;
-   map['pri']=this._priority;
-return map;
-}
-//inorder to retrive data from database youneed to conver map to simple data
- //Extract modelclass objetc from map object
-  modelclass.fromMapobject(Map<String,dynamic>map){
-   _id=map['id'];
-   _title=map['title'];
-   _description=map['desc'];
-   _date=map['date'];
-   _priority=map['pri'];
-
+  set Description(String newDescription) {
+    _title = newDescription;
   }
 
+  set date(String Date) {
+    _title = Date;
+  }
 
+  set priority(int newpriority) {
+    _priority = newpriority;
+  }
 
+  //String to map-only mao from is added to the sqflite database
+  Map<String, dynamic> map() {
+    var map = Map<String, dynamic>();
+    if (id != null) {
+      map['id'] = _id;
+    }
+    map["title"] = _title;
+    map['description'] = _description;
+    map["date"] = _date;
+    map['priority'] = _priority;
+    return map;
+  }
 
-
-
-
-
-
-
+//fetch form sqlf lite database
+  notmodel.frommap(Map<String, dynamic> map) {
+    _id = map['id'];
+    _title = map["title"];
+    _description = map["description"];
+    _date = map['date'];
+    _priority = map['priority'];
+  }
 }
-//sqflite plugins only store data to a database in map form
-//convert simple object in to map object
-//to retrevie data you gan get in map form
-//convert map to simple form
