@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_not_keeper_app/Db/db_helper.dart';
 import 'package:flutter_not_keeper_app/modelclass/databasemode.dart';
+import 'package:intl/intl.dart';
 
 class notedetailspage extends StatefulWidget {
   final String title;
@@ -103,8 +104,8 @@ class _notedetailspageState extends State<notedetailspage> {
               ),
               labelText: "title",
             ),
-               onChanged: (value) {
-             updatetitle();
+            onChanged: (value) {
+              updatetitle();
             },
           ),
         ),
@@ -119,7 +120,7 @@ class _notedetailspageState extends State<notedetailspage> {
               labelText: "Descriptions",
             ),
             onChanged: (value) {
-             updateDescription();
+              updateDescription();
             },
           ),
         ),
@@ -129,7 +130,7 @@ class _notedetailspageState extends State<notedetailspage> {
             children: <Widget>[
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => _save(),
                   child: const Text("Save"),
                 ),
               ),
@@ -138,7 +139,7 @@ class _notedetailspageState extends State<notedetailspage> {
               ),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: ()=>_delete(),
                   child: const Text("Delete"),
                 ),
               ),
@@ -150,6 +151,18 @@ class _notedetailspageState extends State<notedetailspage> {
     return listview;
   }
 
+  void _save() async {
+    movetoLastscreen();
+    notes.date = DateFormat.yMMMd().format(DateTime.now());
+    if (notes.id != null) {
+      await dbhelpers.update(notes);
+      _showAlerdialog("status", "saved sucessfully");
+    } else {
+      await dbhelpers.insert(notes);
+      _showAlerdialog("status", "saved sucessfully");
+    }
+  }
+
   void updatetitle() {
     notes.title = titletextEditingController.text;
   }
@@ -159,6 +172,32 @@ class _notedetailspageState extends State<notedetailspage> {
   }
 
   movetoLastscreen() {
-    Navigator.pop(context);
+    Navigator.pop(context,true);
+  }
+
+  void _showAlerdialog(String title, String message) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+  }
+
+  void _delete() async {
+    movetoLastscreen();
+    if (notes.id == null) {
+      _showAlerdialog("status", "not not deleted");
+      return;
+    }
+    int result = await dbhelpers.delete(notes.id);
+    if (result != 0) {
+      _showAlerdialog("status", "message deleted");
+    } else {
+      _showAlerdialog("status", "Erroe occure while deleting");
+    }
   }
 }

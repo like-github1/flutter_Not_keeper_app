@@ -25,7 +25,7 @@ class _myappState extends State<myapp> {
       title: "note keepr app",
       home:Container(
       
-        child:printContent() ,
+        child:notes() ,
       ),
     );
   }

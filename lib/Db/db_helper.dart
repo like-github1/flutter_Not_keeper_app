@@ -29,7 +29,7 @@ class dbhelper {
 
   void _create(Database db, int version) async {
     await db.execute(
-        "Create Table $tablename($colid int PRIMERYKEY AUTOINCREMENT,$coltitle TEXT, $coldescription TEXT, $coldate Text, $colpri Text)");
+        "Create Table $tablename($colid INT ,$coltitle TEXT, $coldescription TEXT, $coldate Text, $colpri Text)");
   }
 
   //getter for database
