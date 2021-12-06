@@ -154,8 +154,8 @@ class _notedetailspageState extends State<notedetailspage> {
   void _save() async {
     movetoLastscreen();
     notes.date = DateFormat.yMMMd().format(DateTime.now());
-    if (notes.id != null) {
-      await dbhelpers.update(notes);
+    if (notes.id != null) { 
+       await dbhelpers.insert(notes);
       _showAlerdialog("status", "saved sucessfully");
     } else {
       await dbhelpers.insert(notes);
