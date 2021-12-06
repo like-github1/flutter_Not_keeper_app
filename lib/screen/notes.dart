@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_not_keeper_app/Db/db_helper.dart';
-import 'package:flutter_not_keeper_app/Db/db_helper.dart';
 import 'package:flutter_not_keeper_app/modelclass/databasemode.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,7 +14,7 @@ class notes extends StatefulWidget {
 
 class _notesState extends State<notes> {
   dbhelper dbhelpers = dbhelper();
-  List<notmodel> notelist = <notmodel>[]; //Empty list
+  List<modelclass> notelist = <modelclass>[]; //Empty list
   int count = 0;
   @override
   Widget build(BuildContext context) {
@@ -34,11 +33,11 @@ class _notesState extends State<notes> {
             child: const Icon(Icons.add),
             tooltip: "add it now",
             onPressed: () {
-              routepage(notmodel(1, "", "", 2, ""), "add note");
+              routepage(modelclass(1, "", "", "",4), "add note");
             }));
   }
 
-  void routepage(notmodel notemodels, String title) {
+  void routepage(modelclass notemodels, String title) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -60,14 +59,14 @@ class _notesState extends State<notes> {
               onTap: () {
                 routepage(notelist[index], "Edit note");
               },
-              title: Text("no title"),
+              title: Text(notelist[index].title),
               leading: CircleAvatar(
                   backgroundColor: getPrioritycolor(notelist[index].priority),
                   child: getPriorityIcon(notelist[index].priority)),
               subtitle: Text(notelist[index].date),
               trailing: GestureDetector(
                 onTap: () {
-                  _deletitems(context, notelist[index]);
+                  _delete(context, notelist[index]);
                 },
                 child: const Icon(
                   Icons.delete,
@@ -107,18 +106,18 @@ class _notesState extends State<notes> {
     }
   }
 
-  void _deletitems(BuildContext context, notmodel notemodels) async {
-    int result = await dbhelpers.Deleteobjetc(notemodels.id);
+  void _delete(BuildContext context, modelclass model) async {
+    Future<int> result = dbhelpers.delete(model.id);
     if (result != 0) {
-      _showsnackbar(context, "note deleted Successfully");
+      _showsnackbar(context, 'item deleted successfully');
+      updatelistview();
     }
-    updatelistview();
   }
 
   void updatelistview() {
     Future<Database> dbfuture = dbhelpers.initializedatabase();
     dbfuture.then((Dtabase) {
-      Future<List<notmodel>> notelist = dbhelpers.getAlllistfromDtabase();
+      Future<List<modelclass>> notelist = dbhelpers.convert();
       notelist.then((notelist) {
         setState(() {
           notelist = notelist;

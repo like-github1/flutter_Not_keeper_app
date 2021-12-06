@@ -5,7 +5,7 @@ import 'package:flutter_not_keeper_app/modelclass/databasemode.dart';
 
 class notedetailspage extends StatefulWidget {
   final String title;
-  final notmodel notes;
+  final modelclass notes;
 
   notedetailspage(this.notes, this.title, {Key? key}) : super(key: key);
 
@@ -18,7 +18,7 @@ class _notedetailspageState extends State<notedetailspage> {
   final List<String> _priority = <String>["high", "low"];
   dbhelper dbhelpers = dbhelper();
   String appbattitle;
-  notmodel notes;
+  modelclass notes;
   _notedetailspageState(this.notes, this.appbattitle);
   String defaultvalue = "high";
   TextEditingController titletextEditingController = TextEditingController();
@@ -43,6 +43,7 @@ class _notedetailspageState extends State<notedetailspage> {
       body: getlistview(),
     );
   }
+
   //converting from String to Intiger Priority
   void updatePrioritynumberto(String value) {
     switch (value) {
@@ -57,8 +58,8 @@ class _notedetailspageState extends State<notedetailspage> {
   }
 
   //converting from String to Intiger Priority
- String  getPriority(int value) {
-   late String Priority;
+  String getPriority(int value) {
+    late String Priority;
     switch (value) {
       case 1:
         Priority = _priority[0];
@@ -102,6 +103,9 @@ class _notedetailspageState extends State<notedetailspage> {
               ),
               labelText: "title",
             ),
+               onChanged: (value) {
+             updatetitle();
+            },
           ),
         ),
         Padding(
@@ -114,6 +118,9 @@ class _notedetailspageState extends State<notedetailspage> {
               ),
               labelText: "Descriptions",
             ),
+            onChanged: (value) {
+             updateDescription();
+            },
           ),
         ),
         Padding(
@@ -141,6 +148,14 @@ class _notedetailspageState extends State<notedetailspage> {
       ],
     );
     return listview;
+  }
+
+  void updatetitle() {
+    notes.title = titletextEditingController.text;
+  }
+
+  void updateDescription() {
+    notes.description = descriptiontextEditingController.text;
   }
 
   movetoLastscreen() {
